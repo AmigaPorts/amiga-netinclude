@@ -20,6 +20,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef  EXEC_TASKS_H
+#include <exec/tasks.h>
+#endif
+#ifndef  UTILITY_TAGITEM_H
+#include <utility/tagitem.h>
+#endif
 #ifndef  LIBRARIES_USERGROUP_H
 #include <libraries/usergroup.h>
 #endif
