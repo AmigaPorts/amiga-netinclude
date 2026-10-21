@@ -1,0 +1,18 @@
+==id $Id: bsdsocket_ifindex_lib.sfd,v 1.0 2026-10-21 $
+==libname bsdsocket_ifindex
+* DRAFT: four proposed common bsdsocket.library interface-index vectors.
+* This file describes an extension of SocketBase, not a second library.
+* The offsets are subject to independent cross-stack review and agreement.
+* Entries before -0x372 are deliberately neither defined nor renumbered here.
+* Call only after establishing that the loaded library supports this ABI.
+* A revision or vector-table size alone cannot establish slot semantics.
+==base _SocketBase
+==bias 882
+==public
+==include <exec/types.h>
+==include <net/if.h>
+ULONG if_nametoindex(const char *ifname) (a0)
+char *if_indextoname(ULONG ifindex, char *ifname) (d0,a0)
+struct if_nameindex *if_nameindex() ()
+VOID if_freenameindex(struct if_nameindex *ptr) (a0)
+==end
