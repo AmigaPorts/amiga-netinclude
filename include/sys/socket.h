@@ -67,6 +67,9 @@
 
 /****************************************************************************/
 
+/* ssize_t, for recv() and send() below. */
+#include <sys/types.h>
+
 /*
  * We might reference memmove() and memset() below, which is why
  * we need to make sure that both are declared somewhere.
