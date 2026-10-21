@@ -314,6 +314,32 @@ struct	ifconf {
 #define	ifc_req	ifc_ifcu.ifcu_req	/* array of structures returned */
 };
 
+#define IF_NAMESIZE IFNAMSIZ
+
+/*
+ * Terminated by an entry with if_index 0 and if_name NULL, and freed only by
+ * if_freenameindex().
+ */
+struct if_nameindex
+{
+    __ULONG  if_index;  /* 1, 2, ... */
+    char    *if_name;   /* null terminated: "eth0", ... */
+};
+
+/*
+ * if_nametoindex() returns 0 for an unknown name.  if_indextoname()'s `ifname`
+ * needs room for IF_NAMESIZE bytes; it returns NULL on failure.
+ */
+#ifndef __NO_NET_API
+
+extern __stdargs __ULONG if_nametoindex(const char *ifname);
+extern __stdargs char *if_indextoname(__ULONG ifindex, char *ifname);
+extern __stdargs struct if_nameindex *if_nameindex(void);
+extern __stdargs void if_freenameindex(struct if_nameindex *ptr);
+
+#endif /* __NO_NET_API */
+
+
 /****************************************************************************/
 
 #ifdef __GNUC__

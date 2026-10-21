@@ -187,7 +187,11 @@ struct in6_addr {
 	unsigned char   s6_addr[16];   /* IPv6 address */
 };
 
+/* RFC 3493 section 3.4: the same length/family prefix as sockaddr. */
+#define SIN6_LEN 1
+
 struct sockaddr_in6 {
+       __UBYTE         sin6_len;
        sa_family_t     sin6_family;   /* AF_INET6 */
        in_port_t       sin6_port;     /* port number */
        __net_uint32_t  sin6_flowinfo; /* IPv6 flow information */
@@ -273,6 +277,8 @@ struct ip_mreq {
 #define	NTOHS(x) (x)
 #define	HTONL(x) (x)
 #define	HTONS(x) (x)
+
+#include <netinet6/in6.h>
 
 /****************************************************************************/
 
