@@ -92,7 +92,7 @@ def main():
                                              + result.stdout + result.stderr)
                         count += 1
         # Either wire header must work as the only network include, without
-        # exec/types.h or a fortuitous previous include supplying its types.
+        # exec/types.h or another include supplying its types.
         standalone = 0
         for runtime in ("libnix", "newlib", "clib2"):
             for cpu in ("68000", "68020"):
@@ -120,7 +120,7 @@ def main():
                                              + result.stdout + result.stderr)
                         standalone += 1
         # Link the standard constant objects as C and C++ with each runtime.
-        # This SDK fallback is optional when a runtime already owns the data.
+        # The SDK fallback supplies data symbols for CRTs that omit them.
         for runtime in ("libnix", "newlib", "clib2"):
             for lang, compiler in (("c", "gcc"), ("c++", "g++")):
                 source = work / "constants.c"

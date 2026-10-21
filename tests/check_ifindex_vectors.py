@@ -66,8 +66,8 @@ def main():
                                           str(ROOT / "examples/IfNames.c"), "-o", str(example)])
                             run(common + [str(obj), str(example), "-o", str(work / "probe")])
                             count += 1
-        # Ordinary proto inclusion must never silently select the new ABI.
-        # Both existing declaration/stub opt-outs must keep working.
+        # Ordinary proto inclusion leaves opt-in bindings disabled.
+        # Declaration and inline opt-outs suppress the bindings.
         for mode in ("ordinary", "__NO_NET_API", "_NO_INLINE"):
             for lang, compiler in (("c", "gcc"), ("c++", "g++")):
                 source = work / "suppressed.c"

@@ -1,6 +1,6 @@
 /* Exercise the proposed common interface-index vectors.
- * PRECONDITION: the caller has established that the opened library supports
- * this exact ABI. A table-size or version check alone is not sufficient.
+ * Requires a library implementing this exact ABI.
+ * A table-size or version check alone is not sufficient.
  */
 #include <exec/libraries.h>
 #include <proto/bsdsocket_ifindex.h>

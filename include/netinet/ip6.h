@@ -44,7 +44,7 @@ struct ip6_dest { __UBYTE ip6d_nxt, ip6d_len; };
 struct ip6_rthdr {
     __UBYTE ip6r_nxt, ip6r_len, ip6r_type, ip6r_segleft;
 };
-/* Type zero is retained for decoding old packets; RFC 5095 deprecated it. */
+/* Routing type zero: deprecated by RFC 5095; defined for packet decoding. */
 struct ip6_rthdr0 {
     __UBYTE ip6r0_nxt, ip6r0_len, ip6r0_type, ip6r0_segleft;
     __ULONG ip6r0_reserved;

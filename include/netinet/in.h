@@ -196,7 +196,7 @@ struct sockaddr_in6 {
        in_port_t       sin6_port;     /* port number */
        __net_uint32_t  sin6_flowinfo; /* IPv6 flow information */
        struct in6_addr sin6_addr;     /* IPv6 address */
-       __net_uint32_t  sin6_scope_id; /* Scope ID (new in 2.4) */
+       __net_uint32_t  sin6_scope_id; /* IPv6 scope identifier */
 };
 
 /*

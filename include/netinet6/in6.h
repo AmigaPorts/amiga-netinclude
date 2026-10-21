@@ -1,4 +1,4 @@
-/* IPv6 socket API additions. */
+/* IPv6 socket API declarations. */
 #ifndef _NETINET6_IN6_H
 #define _NETINET6_IN6_H
 #include <netinet/in.h>
@@ -7,7 +7,7 @@ extern "C" {
 #endif
 /* --------------------------------------------------------------- protocol */
 
-/* The IANA number.  The NDK's list stops at IPPROTO_RAW 255. */
+/* IPv6 encapsulation protocol number (IANA). */
 #ifndef IPPROTO_IPV6
 #define IPPROTO_IPV6            41
 #endif
@@ -35,7 +35,7 @@ extern "C" {
 #define IPPROTO_DSTOPTS         60
 #endif
 
-/* PF_* and AF_* are the same numbers here as everywhere since 4.2BSD. */
+/* Protocol-family alias. */
 #ifndef PF_INET6
 #define PF_INET6                AF_INET6
 #endif
@@ -45,9 +45,8 @@ extern "C" {
 #define INET6_ADDRSTRLEN        46
 #endif
 
-/* AROS option numbers, except V6ONLY: AROS currently assigns 26 to both
- * V6ONLY and CHECKSUM. Keep the BSD V6ONLY value 27 to avoid that collision.
- * Each option has one meaning on every socket type; no Linux numeric aliases.
+/* Option allocations follow the AROS reference in docs/ipv6-sdk.txt,
+ * with distinct BSD values for CHECKSUM (26) and V6ONLY (27).
  */
 #define IPV6_V6ONLY             27
 #define IPV6_UNICAST_HOPS        4
@@ -82,9 +81,9 @@ struct in6_pktinfo {
 
 /* -------------------------------------------------------------- addresses
  *
- * The NDK's struct in6_addr has no union over s6_addr[16], so an initialiser
- * needs two brace levels and the tests must read bytes, not 32-bit words:
- * a `struct sockaddr *` cast guarantees no word alignment.
+ * Address storage is a sixteen-byte array. Initializers use two brace
+ * levels; address predicates use byte accesses without word-alignment
+ * requirements.
  */
 
 #ifndef IN6ADDR_ANY_INIT
@@ -97,8 +96,7 @@ struct in6_pktinfo {
     {{ 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,1 }}
 #endif
 
-/* Supplied by the C runtime or, when absent, SDK support/in6_addr.c.
- * These are application data, not bsdsocket.library vectors. */
+/* External constants supplied by the C runtime or support/in6_addr.c. */
 extern const struct in6_addr in6addr_any;
 extern const struct in6_addr in6addr_loopback;
 
