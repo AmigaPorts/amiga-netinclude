@@ -20,9 +20,7 @@ described below after identifying an implementation that supports them.
 
 The existing IPv4 structures, option allocations, resolver flags and error
 values stay unchanged. AF_INET6/PF_INET6 become 28 instead of colliding with
-AF_IPX=23, and sockaddr_in6 gains the BSD length/family prefix. Programs
-built with the former IPv6 values/layout must be rebuilt; this does not
-claim binary compatibility with such programs or with AROS binaries.
+AF_IPX=23, and sockaddr_in6 gains the BSD length/family prefix.
 The shared CMSG macros use four-byte record rounding, accept a NULL second
 argument to CMSG_NXTHDR, and return NULL for missing/short ancillary data.
 
