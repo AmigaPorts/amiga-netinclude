@@ -36,6 +36,9 @@
 #ifndef _UCRED_H_
 #define	_UCRED_H_
 
+#include <sys/types.h>
+#include <sys/param.h>	/* NGROUPS */
+
 /*
  * Credentials.
  */
@@ -53,6 +56,6 @@ struct ucred {
 struct ucred *crget();
 struct ucred *crcopy();
 struct ucred *crdup();
-#endif _KERNEL
+#endif /* _KERNEL */
 
 #endif /* !_UCRED_H_ */
