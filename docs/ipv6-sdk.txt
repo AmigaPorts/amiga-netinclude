@@ -39,15 +39,13 @@ This proposal keeps CHECKSUM=26 and gives V6ONLY its distinct BSD value 27.
 Maintainer agreement on that allocation is required before treating it as
 an agreed cross-stack ABI. No runtime alias conflates the two operations.
 
-Roadshow/AmiTCP AI_NUMERICSERV=16 and negative EAI_* values remain intact.
+The existing AI_NUMERICSERV=16 and negative EAI_* values remain intact.
 AROS's different resolver namespace cannot replace the established classic
-IPv4 ABI. AI_ADDRCONFIG and IPv4 IP_PKTINFO are deliberately absent from
-this common proposal. A new macro can activate existing #ifdef branches
-when an old application is rebuilt. In a local Roadshow 1.15 DEMO / library
-4.364 test, a numeric IPv4 lookup succeeded with flags 0x14 but returned
-EAI_BADFLAGS (-1) with 0x414. Restoring the common flag namespace made the
-same conditional-flag application succeed again. These newer extensions
-remain implementation-specific addenda; no zero-valued stand-in is published.
+IPv4 ABI.
+
+Compatibility note: the existing resolver-flag and IPv4 socket-option
+namespace is preserved. Adding feature macros can activate code paths in
+rebuilt applications that older socket libraries do not support.
 
 IPv6 and ICMPv6 wire headers
 ---------------------------
@@ -83,8 +81,7 @@ and follow the traditional macro argument-evaluation contract.
 The filter option is another allocation for maintainers to review, not
 proof of support in existing socket libraries. Applications must handle
 unsupported raw sockets/options. Header existence cannot establish kernel
-features. No private socket-option alias or automatic ABI translation is
-added. AI_ADDRCONFIG and IPv4 IP_PKTINFO remain absent as described above.
+features.
 
 AROS wire references at the pinned commit:
 https://github.com/aros-development-team/AROS/blob/43e2e698c4075f8b9c19b05702ceca17b1ff5442/workbench/network/common/include/netinet/ip6.h

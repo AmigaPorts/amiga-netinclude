@@ -18,12 +18,12 @@ PROBE = r"""#include <exec/types.h>
 CHECK(AF_INET6 == 28 && AF_INET6 != AF_IPX && AF_MAX > AF_INET6);
 CHECK(PF_INET6 == AF_INET6);
 #ifdef IP_PKTINFO
-#error IPv4 packet-info extension leaked into common headers
+#error Existing IPv4 socket-option namespace changed
 #endif
 CHECK(IPV6_V6ONLY == 27 && IPV6_CHECKSUM == 26);
 CHECK(IPV6_TCLASS == 36 && IPV6_RECVPKTINFO == 61);
 #ifdef AI_ADDRCONFIG
-#error Unsupported resolver flag leaked into common headers
+#error Existing resolver-flag namespace changed
 #endif
 CHECK(AI_MASK == (AI_PASSIVE | AI_CANONNAME | AI_NUMERICHOST | AI_NUMERICSERV));
 CHECK(AI_NUMERICSERV == 16 && EAI_NONAME == -2);
