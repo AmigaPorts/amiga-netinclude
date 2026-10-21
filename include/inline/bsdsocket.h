@@ -62,6 +62,15 @@
 #define BSDSOCKET_BASE_NAME SocketBase
 #endif
 
+#ifndef _SFDC_VARARG_DEFINED
+#define _SFDC_VARARG_DEFINED
+#ifdef __HAVE_IPTR_ATTR__
+typedef APTR _sfdc_vararg __attribute__((iptr));
+#else
+typedef ULONG _sfdc_vararg;
+#endif /* __HAVE_IPTR_ATTR__ */
+#endif /* _SFDC_VARARG_DEFINED */
+
 #define socket(domain, type, protocol) ({ \
   LONG _socket_domain = (domain); \
   LONG _socket_type = (type); \
