@@ -12,6 +12,29 @@ extern "C" {
 #define IPPROTO_IPV6            41
 #endif
 
+/* IPv6 next-header protocol numbers (RFC 8200 / IANA). */
+#ifndef IPPROTO_HOPOPTS
+#define IPPROTO_HOPOPTS          0
+#endif
+#ifndef IPPROTO_ROUTING
+#define IPPROTO_ROUTING         43
+#endif
+#ifndef IPPROTO_FRAGMENT
+#define IPPROTO_FRAGMENT        44
+#endif
+#ifndef IPPROTO_ESP
+#define IPPROTO_ESP             50
+#endif
+#ifndef IPPROTO_AH
+#define IPPROTO_AH              51
+#endif
+#ifndef IPPROTO_NONE
+#define IPPROTO_NONE            59
+#endif
+#ifndef IPPROTO_DSTOPTS
+#define IPPROTO_DSTOPTS         60
+#endif
+
 /* PF_* and AF_* are the same numbers here as everywhere since 4.2BSD. */
 #ifndef PF_INET6
 #define PF_INET6                AF_INET6

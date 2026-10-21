@@ -49,11 +49,49 @@ EAI_BADFLAGS (-1) with 0x414. Restoring the common flag namespace made the
 same conditional-flag application succeed again. These newer extensions
 remain implementation-specific addenda; no zero-valued stand-in is published.
 
-No filter-only <netinet/icmp6.h> is introduced. Header-existence probes
-would otherwise select raw ICMPv6 code even though struct icmp6_hdr and
-its protocol definitions were missing. ICMPv6 filters remain an explicit
-addendum; a complete standard ICMPv6 wire-protocol header is outside this
-basic socket proposal, as is <netinet/ip6.h>.
+IPv6 and ICMPv6 wire headers
+---------------------------
+<netinet/ip6.h> and <netinet/icmp6.h> provide the complete RFC 3542
+application packet definitions, with the public wire structures/names of
+the pinned AROS reference and MLDv2 fixed prefixes using BSD names. They
+cover the IPv6 base/extension/fragment headers and options; ICMPv6 errors
+and echo; Neighbor Discovery messages and options (including route, DNS,
+nonce and PREF64); MLDv1/v2; Node Information; Router Renumbering; and
+ICMPv6 type filtering. IPv6 next-header protocol constants are available
+through <netinet/in.h>. Deprecated routing type zero and historical names
+are retained for source compatibility and decoding, not recommended use.
+
+These declarations use the existing SDK's fixed-width types. No C99
+stdint.h dependency, bitfield layout, compiler packing attribute, external
+helper symbol, or kernel statistics/sysctl interface is needed. Natural
+classic m68k layout has the required wire offsets, verified for both CPUs
+with GCC and SAS/C. Multi-octet packet fields and masks are in network byte
+order; the SDK targets big-endian m68k. Structures represent fixed packet
+prefixes, not the size of variable payloads. Applications must validate
+received lengths and arrange suitable alignment before accessing structs.
+Neither header depends on having included another network header first.
+
+ICMP6_FILTER=18 proposes the BSD socket-option allocation at
+IPPROTO_ICMPV6. The pinned AROS icmp6.h provides the structure and six
+filter macros but does not itself allocate the option number. Its filter
+representation is retained: eight 32-bit words, a set bit passes a type.
+This differs from Linux's representation. All shifts use unsigned long,
+including bit 31; the all-types macros evaluate their pointer once without
+requiring memset. The per-type macros require a type in the range 0..255
+and follow the traditional macro argument-evaluation contract.
+
+The filter option is another allocation for maintainers to review, not
+proof of support in existing socket libraries. Applications must handle
+unsupported raw sockets/options. Header existence cannot establish kernel
+features. No private socket-option alias or automatic ABI translation is
+added. AI_ADDRCONFIG and IPv4 IP_PKTINFO remain absent as described above.
+
+AROS wire references at the pinned commit:
+https://github.com/aros-development-team/AROS/blob/43e2e698c4075f8b9c19b05702ceca17b1ff5442/workbench/network/common/include/netinet/ip6.h
+https://github.com/aros-development-team/AROS/blob/43e2e698c4075f8b9c19b05702ceca17b1ff5442/workbench/network/common/include/netinet/icmp6.h
+Protocol/API references: RFC 8200, 3542, 4443, 4861, 2710, 3810, 4620,
+2894, 3971, 4191, 8106 and 8781. MLDv2 field spellings follow BSD mld6.h:
+https://github.com/freebsd/freebsd-src/blob/main/sys/netinet6/mld6.h
 
 Proposed interface-index vectors (draft)
 ----------------------------------------
@@ -166,3 +204,19 @@ no extra C-library string stubs.
 VBCC, SAS/C++ and other compiler versions remain untested. Generated
 bindings and language-mode checks are not substitutes for those compilers.
 The scope is the classic 32-bit-int m68k ABI.
+
+Wire-header verification
+------------------------
+The 48-case GCC ABI/include-order matrix also checks 39 wire structure
+sizes and 57 offsets, plus protocol and option constants. An additional
+48 compilations per GCC version include each new header alone and twice,
+across three CRTs, both CPUs and all four language modes. SAS/C compiles
+both standalone headers for both CPUs in addition to its executable tests.
+
+Every native executable checks exact independent wire bytes for an IPv6
+packet, ICMPv6 echo, Router Advertisement and fragment header. It checks
+all 256 filter types in isolation against all 256 possible types, both
+passing and blocking, including the top bit of every 32-bit word. The
+all-types pointer argument is checked for single evaluation. These tests
+exercise actual target byte order and compiler layout under volamos;
+they do not replace packet/network integration testing of a socket stack.

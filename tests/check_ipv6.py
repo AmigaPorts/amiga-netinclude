@@ -48,6 +48,7 @@ CHECK(sizeof(struct sockaddr_storage) == 128);
 CHECK(OFF(sockaddr_storage, ss_family) == OFF(sockaddr, sa_family));
 CHECK(__alignof__(struct sockaddr_storage) >= __alignof__(struct sockaddr_in));
 CHECK(__alignof__(struct sockaddr_storage) >= __alignof__(struct sockaddr_in6));
+#include "wire_checks.h"
 struct sockaddr_in6 probe = {28, AF_INET6, 0x1234, 0, IN6ADDR_LOOPBACK_INIT, 7};
 """
 
@@ -69,7 +70,7 @@ def main():
                                                   ("c++", "gnu++17", "g++")):
                     for order in (0, 1):
                         headers = ["sys/socket.h", "netinet/in.h", "netdb.h",
-                                   "net/if.h", "net/if_dl.h"]
+                                   "net/if.h", "net/if_dl.h", "netinet/ip6.h", "netinet/icmp6.h"]
                         if order:
                             headers.reverse()
                         source = work / "probe.c"
@@ -79,6 +80,7 @@ def main():
                                    "-x", lang, f"-std={standard}", f"-m{cpu}",
                                    "-Os", "-Wall", "-Wextra", "-Werror",
                                    "-I" + str(sdk / "include"),
+                                   "-I" + str(sdk / "tests"),
                                    "-I" + str(toolchain / "m68k-amigaos/ndk-include")]
                         if runtime != "libnix":
                             command.append("-mcrt=" + runtime)
@@ -89,6 +91,34 @@ def main():
                             raise SystemExit(f"{runtime}/{cpu}/{lang}/order={order}:\n"
                                              + result.stdout + result.stderr)
                         count += 1
+        # Either wire header must work as the only network include, without
+        # exec/types.h or a fortuitous previous include supplying its types.
+        standalone = 0
+        for runtime in ("libnix", "newlib", "clib2"):
+            for cpu in ("68000", "68020"):
+                for lang, standard, compiler in (("c", "gnu89", "gcc"),
+                                                  ("c", "gnu11", "gcc"),
+                                                  ("c++", "gnu++98", "g++"),
+                                                  ("c++", "gnu++17", "g++")):
+                    for header, tag in (("ip6", "ip6_hdr"), ("icmp6", "icmp6_hdr")):
+                        source = work / "standalone.c"
+                        source.write_text(f"#include <netinet/{header}.h>\n"
+                                          f"#include <netinet/{header}.h>\n"
+                                          f"struct {tag} packet;\n")
+                        command = [str(toolchain / "bin" / f"m68k-amigaos-{compiler}"),
+                                   "-x", lang, f"-std={standard}", f"-m{cpu}",
+                                   "-Os", "-Wall", "-Wextra", "-Werror",
+                                   "-I" + str(sdk / "include"),
+                                   "-I" + str(toolchain / "m68k-amigaos/ndk-include")]
+                        if runtime != "libnix":
+                            command.append("-mcrt=" + runtime)
+                        result = subprocess.run(command + ["-c", str(source), "-o",
+                                                            str(work / "standalone.o")],
+                                                text=True, capture_output=True)
+                        if result.returncode:
+                            raise SystemExit(f"standalone {header}/{runtime}/{cpu}/{lang}:\n"
+                                             + result.stdout + result.stderr)
+                        standalone += 1
         # Link the standard constant objects as C and C++ with each runtime.
         # This SDK fallback is optional when a runtime already owns the data.
         for runtime in ("libnix", "newlib", "clib2"):
@@ -133,7 +163,8 @@ def main():
                     raise SystemExit(f"net/if.h {name}/{lang}:\n"
                                      + result.stdout + result.stderr)
         print(f"IPv6 SDK: {count} ABI/include-order compile checks, 6 constant-symbol "
-              "links and 4 net/if.h convention probes passed")
+              f"links, 4 net/if.h convention probes and {standalone} standalone "
+              "wire-header checks passed")
 
 
 if __name__ == "__main__":

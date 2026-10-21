@@ -67,6 +67,13 @@ def main():
             run("sasc-assemble", common + [sasc / "c/asm", "-oWORK:sasc-vectors.o",
                 "TEST:ifindex_vectors_68k.s"])
             for cpu in ("68000", "68020"):
+                for header, tag in (("ip6", "ip6_hdr"), ("icmp6", "icmp6_hdr")):
+                    (work / "standalone.c").write_text(
+                        f"#include <netinet/{header}.h>\n"
+                        f"#include <netinet/{header}.h>\nstruct {tag} packet;\n")
+                    run(f"sasc-{cpu}-standalone-{header}", common + [sasc / "c/sc",
+                        "includedir=SDK:", "cpu=" + cpu,
+                        "objectname=WORK:standalone.o", "WORK:standalone.c"])
                 for order in (0, 1):
                     name = f"sasc-{cpu}-{order}"
                     for obj, source in [("runtime", "TEST:socket_runtime.c"),

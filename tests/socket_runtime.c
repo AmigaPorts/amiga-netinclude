@@ -2,6 +2,7 @@
  * The test library uses deterministic 68k callbacks, not host networking.
  */
 #include "socket_abi.h"
+#include "wire_runtime.h"
 #include <exec/libraries.h>
 #include <proto/bsdsocket_ifindex.h>
 
@@ -23,6 +24,8 @@ int main(void)
 
     if (CheckSocketLayout() != 0)
         return 12;
+    if (CheckWirePackets() != 0)
+        return 13;
     if (!IN6_IS_ADDR_UNSPECIFIED(&any) || !IN6_IS_ADDR_LOOPBACK(&loop) ||
         in6addr_any.s6_addr[0] != 0 || in6addr_loopback.s6_addr[15] != 1)
         return 1;

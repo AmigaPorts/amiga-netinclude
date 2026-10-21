@@ -6,6 +6,8 @@
 #include <exec/types.h>
 #include <stddef.h>
 #if TEST_REVERSE_INCLUDE
+#include <netinet/icmp6.h>
+#include <netinet/ip6.h>
 #include <net/if_dl.h>
 #include <net/if.h>
 #include <netdb.h>
@@ -17,6 +19,8 @@
 #include <netdb.h>
 #include <net/if.h>
 #include <net/if_dl.h>
+#include <netinet/ip6.h>
+#include <netinet/icmp6.h>
 #endif
 struct align_sockaddr_storage { char c; struct sockaddr_storage value; };
 struct align_sockaddr_dl { char c; struct sockaddr_dl value; };
@@ -71,6 +75,7 @@ CHECK(offsetof(struct align_sockaddr_storage, value) >= offsetof(struct align_so
 CHECK(sizeof(int) == 4 && sizeof(ssize_t) == 4 && (ssize_t)-1 < 0);
 CHECK(sizeof(in_addr_t) == 4 && sizeof(socklen_t) == 4);
 CHECK(sizeof(struct cmsghdr) == 12);
+#include "wire_checks.h"
     return 0;
 }
 #undef CHECK
