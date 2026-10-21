@@ -1,4 +1,4 @@
-/* Ancillary layout shared by the SDK and its compatibility include.
+/* Ancillary data layout for classic m68k socket applications.
  * Four-byte record rounding is part of the m68k socket ABI.
  */
 #ifndef _SYS_CMSG_H

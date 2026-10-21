@@ -9,7 +9,7 @@
 extern struct Library TestSocketBase;
 struct Library *SocketBase;
 struct if_nameindex TestNames[] = { { 7, "lo0" }, { 0, NULL } };
-ULONG TestFreed, TestNullFreed, TestBadFree;
+ULONG TestFreed, TestBadFree;
 int CheckInterfaceNames(struct Library *base);
 
 int main(void)
@@ -63,11 +63,16 @@ int main(void)
         if_indextoname(0, name) != NULL)
         return 9;
     if_freenameindex(names);
-    if_freenameindex(NULL);
-    if (TestFreed != 1 || TestNullFreed != 1 || TestBadFree != 0)
+    if (TestFreed != 1 || TestBadFree != 0)
         return 10;
     if (CheckInterfaceNames(SocketBase) != 0 || TestFreed != 2 ||
-        TestNullFreed != 2 || TestBadFree != 0)
+        TestBadFree != 0)
         return 11;
+    /* A successful enumeration may contain only its terminating entry. */
+    TestNames[0].if_index = 0;
+    TestNames[0].if_name = NULL;
+    if (CheckInterfaceNames(SocketBase) != 0 || TestFreed != 3 ||
+        TestBadFree != 0)
+        return 14;
     return 0;
 }

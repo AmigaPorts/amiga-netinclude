@@ -11,8 +11,7 @@ notices and unrelated whitespace are preserved.
 
 The common headers declare the basic classic m68k IPv6 socket API and
 ancillary macros. A separate, explicit opt-in proposes four interface-index
-vectors for a common ABI. No implementation-specific control/query vectors
-or capability tags are added to the common API.
+vectors for a common ABI.
 A declaration is not evidence that the loaded socket library or C runtime
 implements a function or option. Existing library identification and
 runtime feature/error handling remain necessary. In particular, ordinary
@@ -106,7 +105,7 @@ allocation. Other stacks may already use these slots differently; their
 maintainers must assess collisions and deployment compatibility. The
 existing common vectors through getnameinfo (-0x336) are unchanged. This
 SFD starts at bias 882 and neither allocates nor renumbers any preceding
-slots. It opens no second library and allocates no shared capability tag.
+slots. The bindings use the existing socket library base.
 
 Ordinary <proto/bsdsocket.h> does not select the proposed ABI. Applications
 explicitly include <proto/bsdsocket_ifindex.h> to obtain direct-call
@@ -122,7 +121,6 @@ establish that its opened library supports the proposed ABI before any
 call. Revision or vector-table size alone does not establish slot semantics.
 examples/IfNames.c accepts an already verified library base and exercises
 all four calls; establishing ABI support is an explicit caller precondition.
-No stack-specific identity checks or feature tags are introduced here.
 How a common implementation should advertise support remains a review
 question, alongside allocation of these vector offsets.
 
@@ -146,7 +144,7 @@ compiler's remaining NDK/OS headers. It checks C89/C11/C++98/C++17 across
 libnix, newlib and clib2 on 68000/68020, include order, ABI layouts and
 option values; it links the optional constants as C/C++; it checks the
 __stdargs convention under -mregparm=2 and __NO_NET_API suppression.
-They need neither downstream source files nor a running stack. The vector
+They require only this repository and the compiler installation. The vector
 check adds 48 binding/example compile-link and jump checks across three
 CRTs, 68000/68020, C89/C++98, both proto include orders, and ordinary versus
 -mregparm=2 argument conventions, plus six opt-in/suppression checks.
@@ -156,8 +154,8 @@ The local rehearsal also compiled all 60 applicable pre-existing upstream
 headers in C89/C++98 across the three runtimes before and after this
 series: no new failures. Existing failures in usergroup/sys/ucred-related
 headers are outside this series. A 36-value IPv4 structure/offset
-fingerprint was byte-identical. Additional glue probes covered both proto
-header orders, API suppression and register-argument mode.
+fingerprint was byte-identical. The vector probes cover both proto header
+orders, API suppression and register-argument mode.
 
 Compiler coverage
 -----------------
@@ -191,7 +189,9 @@ volamos 0.11.0 at d83fe4dda47dedf3d8279782f08bf1d37bd7565c.
 These executables check layouts, ancillary traversal, address constants and
 all four vector calls against deterministic 68k callbacks. They validate
 actual A0/D0 arguments, return values and list disposal through the proposed
-negative offsets, without opening any real socket library. They do not
+negative offsets, including enumeration and disposal of a valid empty
+interface list. The tests free only arrays returned by if_nameindex().
+They run without opening any real socket library and do not
 establish network-stack support or runtime compatibility of every CRT.
 SAS/C's offsetof is not an integer constant expression, so its portable
 layout checks execute at run time; the GCC matrix also checks the layouts

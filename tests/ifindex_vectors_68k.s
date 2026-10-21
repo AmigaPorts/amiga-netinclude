@@ -1,7 +1,6 @@
         xdef    _TestSocketBase
         xref    _TestNames
         xref    _TestFreed
-        xref    _TestNullFreed
         xref    _TestBadFree
 
         section __MERGED,data
@@ -22,6 +21,9 @@ _TestSocketBase:
 
         section callbacks,code
 MockName:
+        lea     _TestNames,a1
+        tst.l   (a1)
+        beq.s   Unknown
         cmpi.b  #108,(a0)
         bne.s   Unknown
         cmpi.b  #111,1(a0)
@@ -36,6 +38,9 @@ Unknown:
         moveq   #0,d0
         rts
 MockIndex:
+        lea     _TestNames,a1
+        tst.l   (a1)
+        beq.s   Unknown
         cmpi.l  #7,d0
         bne.s   Unknown
         move.l  a0,d0
@@ -49,15 +54,10 @@ MockList:
         move.l  a0,d0
         rts
 MockFree:
-        move.l  a0,d0
-        beq.s   FreeNull
         lea     _TestNames,a1
         cmpa.l  a1,a0
         bne.s   FreeBad
         addq.l  #1,_TestFreed
-        rts
-FreeNull:
-        addq.l  #1,_TestNullFreed
         rts
 FreeBad:
         addq.l  #1,_TestBadFree

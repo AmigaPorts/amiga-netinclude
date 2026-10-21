@@ -21,7 +21,6 @@ static int SameInterfaceName(const char *a, const char *b)
 }
 
 /* The parameter shadows the usual external base for these direct calls.
- * No implementation-specific discovery method is assumed by this example.
  * Returns zero on success and -1 on failure.
  */
 int CheckInterfaceNames(struct Library *SocketBase)
@@ -43,10 +42,13 @@ int CheckInterfaceNames(struct Library *SocketBase)
             !SameInterfaceName(name, names[i].if_name))
             result = -1;
     }
-    if (i == 0 || if_nametoindex("interface-name-longer-than-IF_NAMESIZE") != 0 ||
+    if (names[i].if_name != NULL ||
+        if_nametoindex("interface-name-longer-than-IF_NAMESIZE") != 0 ||
         if_indextoname(0, name) != NULL)
         result = -1;
+    /* RFC 3493 section 4.4: free the array returned by if_nameindex(),
+     * including a valid list containing only its terminator.
+     */
     if_freenameindex(names);
-    if_freenameindex(NULL);
     return result;
 }
