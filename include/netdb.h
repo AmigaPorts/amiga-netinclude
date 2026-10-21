@@ -80,9 +80,7 @@
 #include <sys/netinclude_types.h>
 #endif /* _SYS_NETINCLUDE_TYPES_H */
 
-#ifndef _SYS_ERRNO_H
-#include <sys/errno.h>
-#endif /* _SYS_ERRNO_H */
+#include <errno.h>
 
 #ifndef _NETINET_IN_H
 #include <netinet/in.h>

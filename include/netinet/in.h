@@ -83,7 +83,15 @@ extern "C" {
 /*
  * Data types.
  */
-typedef __uint32_t	in_addr_t;
+/* Use the compiler's 32-bit type when available, without depending on a
+ * CRT private typedef; otherwise the SDK's unsigned long is 32 bits.
+ */
+#ifdef __UINT32_TYPE__
+typedef __UINT32_TYPE__ __net_uint32_t;
+#else
+typedef __ULONG __net_uint32_t;
+#endif
+typedef __net_uint32_t in_addr_t;
 typedef unsigned short	in_port_t;
 
 /*
@@ -182,9 +190,9 @@ struct in6_addr {
 struct sockaddr_in6 {
        sa_family_t     sin6_family;   /* AF_INET6 */
        in_port_t       sin6_port;     /* port number */
-       __uint32_t      sin6_flowinfo; /* IPv6 flow information */
+       __net_uint32_t  sin6_flowinfo; /* IPv6 flow information */
        struct in6_addr sin6_addr;     /* IPv6 address */
-       __uint32_t      sin6_scope_id; /* Scope ID (new in 2.4) */
+       __net_uint32_t  sin6_scope_id; /* Scope ID (new in 2.4) */
 };
 
 /*

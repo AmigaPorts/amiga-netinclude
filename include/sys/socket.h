@@ -70,12 +70,18 @@
 /* ssize_t, for recv() and send() below. */
 #include <sys/types.h>
 
+/* SAS/C 6.x provides size_t but omits the POSIX signed counterpart. */
+#if defined(__SASC) && !defined(_SSIZE_T) && !defined(_SSIZE_T_DECLARED)
+#define _SSIZE_T
+#define _SSIZE_T_DECLARED
+typedef int ssize_t;
+#endif
+
 /*
  * We might reference memmove() and memset() below, which is why
  * we need to make sure that both are declared somewhere.
  */
 #include <string.h>
-#include <stdlib.h>
 #include <stddef.h>
 
 /****************************************************************************/
