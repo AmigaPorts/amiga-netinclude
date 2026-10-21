@@ -1,0 +1,168 @@
+Classic m68k IPv6 header proposal
+================================
+
+Base and scope
+--------------
+This series is based on c9fed00ba3186d9b02bc0de13eb0cf3c83f087e1, the
+head of AmigaPorts/amiga-netinclude#2, which is stacked on #1. Those are
+prerequisites; this is not a replacement for their fixes or an unrelated
+resynchronization of the SDK. Existing file modes, encoding, copyright
+notices and unrelated whitespace are preserved.
+
+The common headers declare the basic classic m68k IPv6 socket API and
+ancillary macros. A separate, explicit opt-in proposes four interface-index
+vectors for a common ABI. No implementation-specific control/query vectors
+or capability tags are added to the common API.
+A declaration is not evidence that the loaded socket library or C runtime
+implements a function or option. Existing library identification and
+runtime feature/error handling remain necessary. In particular, ordinary
+if_* calls need a runtime/stub provider, or the opt-in direct-call bindings
+described below after identifying an implementation that supports them.
+
+The existing IPv4 structures, option allocations, resolver flags and error
+values stay unchanged. AF_INET6/PF_INET6 become 28 instead of colliding with
+AF_IPX=23, and sockaddr_in6 gains the BSD length/family prefix. Programs
+built with the former IPv6 values/layout must be rebuilt; this does not
+claim binary compatibility with such programs or with AROS binaries.
+The shared CMSG macros use four-byte record rounding, accept a NULL second
+argument to CMSG_NXTHDR, and return NULL for missing/short ancillary data.
+
+Reference and deliberate choice
+-------------------------------
+AROS reference: 43e2e698c4075f8b9c19b05702ceca17b1ff5442,
+workbench/network/common/include/{sys/socket.h,netinet/in.h,net/if.h}.
+https://github.com/aros-development-team/AROS/blob/43e2e698c4075f8b9c19b05702ceca17b1ff5442/workbench/network/common/include/netinet/in.h
+
+The IPv6 option values follow that reference except IPV6_V6ONLY=27.
+The pinned AROS header assigns 26 to BOTH IPV6_V6ONLY and IPV6_CHECKSUM.
+This proposal keeps CHECKSUM=26 and gives V6ONLY its distinct BSD value 27.
+Maintainer agreement on that allocation is required before treating it as
+an agreed cross-stack ABI. No runtime alias conflates the two operations.
+
+Roadshow/AmiTCP AI_NUMERICSERV=16 and negative EAI_* values remain intact.
+AROS's different resolver namespace cannot replace the established classic
+IPv4 ABI. AI_ADDRCONFIG and IPv4 IP_PKTINFO are deliberately absent from
+this common proposal. A new macro can activate existing #ifdef branches
+when an old application is rebuilt. In a local Roadshow 1.15 DEMO / library
+4.364 test, a numeric IPv4 lookup succeeded with flags 0x14 but returned
+EAI_BADFLAGS (-1) with 0x414. Restoring the common flag namespace made the
+same conditional-flag application succeed again. These newer extensions
+remain implementation-specific addenda; no zero-valued stand-in is published.
+
+No filter-only <netinet/icmp6.h> is introduced. Header-existence probes
+would otherwise select raw ICMPv6 code even though struct icmp6_hdr and
+its protocol definitions were missing. ICMPv6 filters remain an explicit
+addendum; a complete standard ICMPv6 wire-protocol header is outside this
+basic socket proposal, as is <netinet/ip6.h>.
+
+Proposed interface-index vectors (draft)
+----------------------------------------
+The SFD sfd/bsdsocket_ifindex_lib.sfd describes these four entries relative
+to the existing bsdsocket.library base, with the base in A6:
+
+  Function             LVO hex   LVO decimal  Arguments         Result
+  if_nametoindex       -0x372    -882         name in A0        index in D0
+  if_indextoname       -0x378    -888         index D0, name A0 pointer D0
+  if_nameindex         -0x37e    -894         none              pointer D0
+  if_freenameindex     -0x384    -900         list in A0        void
+
+This is a concrete proposal for review, not an agreed cross-stack
+allocation. Other stacks may already use these slots differently; their
+maintainers must assess collisions and deployment compatibility. The
+existing common vectors through getnameinfo (-0x336) are unchanged. This
+SFD starts at bias 882 and neither allocates nor renumbers any preceding
+slots. It opens no second library and allocates no shared capability tag.
+
+Ordinary <proto/bsdsocket.h> does not select the proposed ABI. Applications
+explicitly include <proto/bsdsocket_ifindex.h> to obtain direct-call
+bindings, or use a CRT/stub provider with <net/if.h>. The opt-in honors
+__NO_NET_API and _NO_INLINE. It supplies GCC inlines, VBCC register bindings,
+legacy compiler pragmas and assembler LVO constants. Generated files are
+committed; regeneration is optional:
+
+  SFDC=/path/to/sfdc sh tools/gen-ifindex.sh --check
+
+The bindings do not perform runtime detection themselves. A caller must
+establish that its opened library supports the proposed ABI before any
+call. Revision or vector-table size alone does not establish slot semantics.
+examples/IfNames.c accepts an already verified library base and exercises
+all four calls; establishing ABI support is an explicit caller precondition.
+No stack-specific identity checks or feature tags are introduced here.
+How a common implementation should advertise support remains a review
+question, alongside allocation of these vector offsets.
+
+Data symbols
+------------
+The declarations of in6addr_any and in6addr_loopback have external C
+linkage. If the C runtime does not already supply them, compile and link
+support/in6_addr.c once into the application. Do not add that fallback
+when the runtime already owns the symbols. No shared-library data exports
+or new vector slots are assumed. Runtime maintainers may instead adopt
+the definitions into their own libraries.
+
+Validation
+----------
+From this repository, run:
+  python3 tests/check_ipv6.py --toolchain /path/to/toolchain
+  python3 tests/check_ifindex_vectors.py --toolchain /path/to/toolchain
+
+The compiler checks use this repository's complete include tree, with the supplied
+compiler's remaining NDK/OS headers. It checks C89/C11/C++98/C++17 across
+libnix, newlib and clib2 on 68000/68020, include order, ABI layouts and
+option values; it links the optional constants as C/C++; it checks the
+__stdargs convention under -mregparm=2 and __NO_NET_API suppression.
+They need neither downstream source files nor a running stack. The vector
+check adds 48 binding/example compile-link and jump checks across three
+CRTs, 68000/68020, C89/C++98, both proto include orders, and ordinary versus
+-mregparm=2 argument conventions, plus six opt-in/suppression checks.
+The declarations and bindings do not establish cross-stack availability.
+
+The local rehearsal also compiled all 60 applicable pre-existing upstream
+headers in C89/C++98 across the three runtimes before and after this
+series: no new failures. Existing failures in usergroup/sys/ucred-related
+headers are outside this series. A 36-value IPv4 structure/offset
+fingerprint was byte-identical. Additional glue probes covered both proto
+header orders, API suppression and register-argument mode.
+
+Compiler coverage
+-----------------
+Actual GCC 6.5.0b (AmigaDev v16.2-rc18-12-g7209b6f) and GCC 16.2.1b
+(AmigaDev de370a1) each pass 48 ABI/include-order checks, six constant links,
+four convention probes, and all 48 vector/example compile-link and jump
+checks plus six opt-in/suppression probes. This includes clib2 with
+-mregparm=2. The socket header no longer includes unused <stdlib.h>, whose
+conflicting callback declarations caused the eight older clib2 failures.
+
+The common declarations do not depend on the CRT-private __uint32_t name.
+They use the compiler's 32-bit type when provided, falling back to the SDK's
+32-bit unsigned long. GNU public address/flow/scope types retain their
+original identities in all three CRTs. SAS/C 6.x receives a guarded ssize_t
+matching its 32-bit size_t. netdb.h includes standard <errno.h> rather than
+requiring the nonstandard <sys/errno.h> path.
+
+For executable checks, build volamos and run either or both:
+  python3 tests/check_native.py --volamos /path/to/volamos \
+      --toolchain /path/to/toolchain
+  python3 tests/check_native.py --volamos /path/to/volamos \
+      --sasc /path/to/sasc
+
+Optional --output-dir NEW_DIRECTORY retains binaries and logs. No compiler
+or runtime binaries are distributed here. The test uses ordinary libnix for
+GCC execution, and SAS/C's own compiler, assembler and linker for its native
+build. Both 68000 and 68020 targets and both header orders are checked.
+SAS/C 6.58 and GCC 6.5/16 each pass all four compiled executable cases under
+volamos 0.11.0 at d83fe4dda47dedf3d8279782f08bf1d37bd7565c.
+
+These executables check layouts, ancillary traversal, address constants and
+all four vector calls against deterministic 68k callbacks. They validate
+actual A0/D0 arguments, return values and list disposal through the proposed
+negative offsets, without opening any real socket library. They do not
+establish network-stack support or runtime compatibility of every CRT.
+SAS/C's offsetof is not an integer constant expression, so its portable
+layout checks execute at run time; the GCC matrix also checks the layouts
+at compile time. The example uses a bounded local name comparison and needs
+no extra C-library string stubs.
+
+VBCC, SAS/C++ and other compiler versions remain untested. Generated
+bindings and language-mode checks are not substitutes for those compilers.
+The scope is the classic 32-bit-int m68k ABI.
