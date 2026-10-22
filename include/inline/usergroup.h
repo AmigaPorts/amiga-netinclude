@@ -40,6 +40,15 @@
 #define USERGROUP_BASE_NAME UserGroupBase
 #endif
 
+#ifndef _SFDC_VARARG_DEFINED
+#define _SFDC_VARARG_DEFINED
+#ifdef __HAVE_IPTR_ATTR__
+typedef APTR _sfdc_vararg __attribute__((iptr));
+#else
+typedef ULONG _sfdc_vararg;
+#endif /* __HAVE_IPTR_ATTR__ */
+#endif /* _SFDC_VARARG_DEFINED */
+
 #define ug_SetupContextTagList(name, tags) ({ \
   STRPTR _ug_SetupContextTagList_name = (name); \
   struct TagItem * _ug_SetupContextTagList_tags = (tags); \
