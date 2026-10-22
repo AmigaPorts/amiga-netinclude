@@ -38,6 +38,10 @@
 #ifndef _RESOLV_H_
 #define	_RESOLV_H_
 
+#include <sys/types.h>		/* u_char, u_int32_t */
+#include <netinet/in.h>		/* struct sockaddr_in */
+#include <arpa/nameser.h>	/* MAXDNAME */
+
 /*
  * revision information.  this is the release date in YYYYMMDD format.
  * it can change every day so the right thing to do with it is use it
