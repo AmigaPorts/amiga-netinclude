@@ -196,10 +196,10 @@ struct	linger {
 #define	AF_CNT		21		/* Computer Network Technology */
 #define pseudo_AF_RTIP	22		/* Help Identify RTIP packets */
 #define	AF_IPX		23		/* Novell Internet Protocol */
-#define AF_INET6        23              /* IP version 6 */ 
 #define	AF_SIP		24		/* Simple Internet Protocol */
 #define pseudo_AF_PIP	25		/* Help Identify PIP packets */
-#define	AF_MAX		26
+#define	AF_INET6	28		/* IP version 6 */
+#define	AF_MAX		29
 
 /*
  * Structure used by kernel to store most
@@ -251,6 +251,7 @@ struct sockproto {
 #define	PF_IPX		AF_IPX		/* same format as AF_NS */
 #define PF_RTIP		pseudo_AF_FTIP	/* same format as AF_INET */
 #define PF_PIP		pseudo_AF_PIP
+#define	PF_INET6	AF_INET6
 
 #define	PF_MAX		AF_MAX
 

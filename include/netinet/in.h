@@ -179,7 +179,10 @@ struct in6_addr {
 	unsigned char   s6_addr[16];   /* IPv6 address */
 };
 
+#define	SIN6_LEN
+
 struct sockaddr_in6 {
+       __UBYTE         sin6_len;      /* length of this struct */
        sa_family_t     sin6_family;   /* AF_INET6 */
        in_port_t       sin6_port;     /* port number */
        __uint32_t      sin6_flowinfo; /* IPv6 flow information */
