@@ -438,14 +438,14 @@ typedef ULONG _sfdc_vararg;
   ULONG _SetSocketSignals_io_mask = (io_mask); \
   ULONG _SetSocketSignals_urgent_mask = (urgent_mask); \
   { \
-  register struct Library * const __SetSocketSignals__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __SetSocketSignals__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register ULONG __SetSocketSignals_int_mask __asm("d0") = (_SetSocketSignals_int_mask); \
   register ULONG __SetSocketSignals_io_mask __asm("d1") = (_SetSocketSignals_io_mask); \
   register ULONG __SetSocketSignals_urgent_mask __asm("d2") = (_SetSocketSignals_urgent_mask); \
   __asm volatile ("jsr a6@(-132:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__SetSocketSignals__bn), "r"(__SetSocketSignals_int_mask), "r"(__SetSocketSignals_io_mask), "r"(__SetSocketSignals_urgent_mask) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -539,13 +539,13 @@ typedef ULONG _sfdc_vararg;
   APTR _SetErrnoPtr_errno_ptr = (errno_ptr); \
   LONG _SetErrnoPtr_size = (size); \
   { \
-  register struct Library * const __SetErrnoPtr__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __SetErrnoPtr__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register APTR __SetErrnoPtr_errno_ptr __asm("a0") = (_SetErrnoPtr_errno_ptr); \
   register LONG __SetErrnoPtr_size __asm("d0") = (_SetErrnoPtr_size); \
   __asm volatile ("jsr a6@(-168:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__SetErrnoPtr__bn), "r"(__SetErrnoPtr_errno_ptr), "r"(__SetErrnoPtr_size) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -790,14 +790,14 @@ typedef ULONG _sfdc_vararg;
   STRPTR _vsyslog_msg = (msg); \
   APTR _vsyslog_args = (args); \
   { \
-  register struct Library * const __vsyslog__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __vsyslog__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register LONG __vsyslog_pri __asm("d0") = (_vsyslog_pri); \
   register STRPTR __vsyslog_msg __asm("a0") = (_vsyslog_msg); \
   register APTR __vsyslog_args __asm("a1") = (_vsyslog_args); \
   __asm volatile ("jsr a6@(-258:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__vsyslog__bn), "r"(__vsyslog_pri), "r"(__vsyslog_msg), "r"(__vsyslog_args) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1123,12 +1123,12 @@ typedef ULONG _sfdc_vararg;
 #define FreeRouteInfo(buf) ({ \
   struct rt_msghdr * _FreeRouteInfo_buf = (buf); \
   { \
-  register struct Library * const __FreeRouteInfo__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __FreeRouteInfo__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct rt_msghdr * __FreeRouteInfo_buf __asm("a0") = (_FreeRouteInfo_buf); \
   __asm volatile ("jsr a6@(-432:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__FreeRouteInfo__bn), "r"(__FreeRouteInfo_buf) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1203,12 +1203,12 @@ typedef ULONG _sfdc_vararg;
 #define ReleaseInterfaceList(list) ({ \
   struct List * _ReleaseInterfaceList_list = (list); \
   { \
-  register struct Library * const __ReleaseInterfaceList__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __ReleaseInterfaceList__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct List * __ReleaseInterfaceList_list __asm("a0") = (_ReleaseInterfaceList_list); \
   __asm volatile ("jsr a6@(-456:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__ReleaseInterfaceList__bn), "r"(__ReleaseInterfaceList_list) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1281,36 +1281,36 @@ typedef ULONG _sfdc_vararg;
 #define DeleteAddrAllocMessage(aam) ({ \
   struct AddressAllocationMessage * _DeleteAddrAllocMessage_aam = (aam); \
   { \
-  register struct Library * const __DeleteAddrAllocMessage__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __DeleteAddrAllocMessage__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct AddressAllocationMessage * __DeleteAddrAllocMessage_aam __asm("a0") = (_DeleteAddrAllocMessage_aam); \
   __asm volatile ("jsr a6@(-480:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__DeleteAddrAllocMessage__bn), "r"(__DeleteAddrAllocMessage_aam) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
 #define BeginInterfaceConfig(message) ({ \
   struct AddressAllocationMessage * _BeginInterfaceConfig_message = (message); \
   { \
-  register struct Library * const __BeginInterfaceConfig__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __BeginInterfaceConfig__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct AddressAllocationMessage * __BeginInterfaceConfig_message __asm("a0") = (_BeginInterfaceConfig_message); \
   __asm volatile ("jsr a6@(-486:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__BeginInterfaceConfig__bn), "r"(__BeginInterfaceConfig_message) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
 #define AbortInterfaceConfig(message) ({ \
   struct AddressAllocationMessage * _AbortInterfaceConfig_message = (message); \
   { \
-  register struct Library * const __AbortInterfaceConfig__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __AbortInterfaceConfig__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct AddressAllocationMessage * __AbortInterfaceConfig_message __asm("a0") = (_AbortInterfaceConfig_message); \
   __asm volatile ("jsr a6@(-492:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__AbortInterfaceConfig__bn), "r"(__AbortInterfaceConfig_message) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1342,12 +1342,12 @@ typedef ULONG _sfdc_vararg;
 #define RemoveNetMonitorHook(hook) ({ \
   struct Hook * _RemoveNetMonitorHook_hook = (hook); \
   { \
-  register struct Library * const __RemoveNetMonitorHook__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __RemoveNetMonitorHook__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct Hook * __RemoveNetMonitorHook_hook __asm("a0") = (_RemoveNetMonitorHook_hook); \
   __asm volatile ("jsr a6@(-504:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__RemoveNetMonitorHook__bn), "r"(__RemoveNetMonitorHook_hook) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1408,12 +1408,12 @@ typedef ULONG _sfdc_vararg;
 #define ReleaseDomainNameServerList(list) ({ \
   struct List * _ReleaseDomainNameServerList_list = (list); \
   { \
-  register struct Library * const __ReleaseDomainNameServerList__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __ReleaseDomainNameServerList__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct List * __ReleaseDomainNameServerList_list __asm("a0") = (_ReleaseDomainNameServerList_list); \
   __asm volatile ("jsr a6@(-528:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__ReleaseDomainNameServerList__bn), "r"(__ReleaseDomainNameServerList_list) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1434,21 +1434,21 @@ typedef ULONG _sfdc_vararg;
 #define setnetent(stay_open) ({ \
   LONG _setnetent_stay_open = (stay_open); \
   { \
-  register struct Library * const __setnetent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __setnetent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register LONG __setnetent_stay_open __asm("d0") = (_setnetent_stay_open); \
   __asm volatile ("jsr a6@(-540:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__setnetent__bn), "r"(__setnetent_stay_open) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
 #define endnetent() ({ \
-  register struct Library * const __endnetent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __endnetent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   __asm volatile ("jsr a6@(-546:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__endnetent__bn) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
 })
 
 #define getnetent() ({ \
@@ -1468,21 +1468,21 @@ typedef ULONG _sfdc_vararg;
 #define setprotoent(stay_open) ({ \
   LONG _setprotoent_stay_open = (stay_open); \
   { \
-  register struct Library * const __setprotoent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __setprotoent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register LONG __setprotoent_stay_open __asm("d0") = (_setprotoent_stay_open); \
   __asm volatile ("jsr a6@(-558:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__setprotoent__bn), "r"(__setprotoent_stay_open) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
 #define endprotoent() ({ \
-  register struct Library * const __endprotoent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __endprotoent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   __asm volatile ("jsr a6@(-564:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__endprotoent__bn) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
 })
 
 #define getprotoent() ({ \
@@ -1502,21 +1502,21 @@ typedef ULONG _sfdc_vararg;
 #define setservent(stay_open) ({ \
   LONG _setservent_stay_open = (stay_open); \
   { \
-  register struct Library * const __setservent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __setservent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register LONG __setservent_stay_open __asm("d0") = (_setservent_stay_open); \
   __asm volatile ("jsr a6@(-576:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__setservent__bn), "r"(__setservent_stay_open) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
 #define endservent() ({ \
-  register struct Library * const __endservent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __endservent__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   __asm volatile ("jsr a6@(-582:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__endservent__bn) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
 })
 
 #define getservent() ({ \
@@ -1708,12 +1708,12 @@ typedef ULONG _sfdc_vararg;
 #define mbuf_freem(m) ({ \
   struct mbuf * _mbuf_freem_m = (m); \
   { \
-  register struct Library * const __mbuf_freem__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __mbuf_freem__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct mbuf * __mbuf_freem_m __asm("a0") = (_mbuf_freem_m); \
   __asm volatile ("jsr a6@(-648:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__mbuf_freem__bn), "r"(__mbuf_freem_m) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1868,12 +1868,12 @@ typedef ULONG _sfdc_vararg;
 #define SetDefaultDomainName(buffer) ({ \
   STRPTR _SetDefaultDomainName_buffer = (buffer); \
   { \
-  register struct Library * const __SetDefaultDomainName__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __SetDefaultDomainName__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register STRPTR __SetDefaultDomainName_buffer __asm("a0") = (_SetDefaultDomainName_buffer); \
   __asm volatile ("jsr a6@(-708:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__SetDefaultDomainName__bn), "r"(__SetDefaultDomainName_buffer) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -1896,12 +1896,12 @@ typedef ULONG _sfdc_vararg;
 #define ReleaseRoadshowData(list) ({ \
   struct List * _ReleaseRoadshowData_list = (list); \
   { \
-  register struct Library * const __ReleaseRoadshowData__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __ReleaseRoadshowData__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct List * __ReleaseRoadshowData_list __asm("a0") = (_ReleaseRoadshowData_list); \
   __asm volatile ("jsr a6@(-720:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__ReleaseRoadshowData__bn), "r"(__ReleaseRoadshowData_list) \
-  : "d0", "d1", "a0", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
@@ -2000,12 +2000,12 @@ typedef ULONG _sfdc_vararg;
 #define freeaddrinfo(ai) ({ \
   struct addrinfo * _freeaddrinfo_ai = (ai); \
   { \
-  register struct Library * const __freeaddrinfo__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
+  register struct Library * const __freeaddrinfo__bn __asm("a6") = (struct Library *) (BSDSOCKET_BASE_NAME); register int _d0 __asm("d0"); register int _d1 __asm("d1"); register int _a0 __asm("a0"); register int _a1 __asm("a1");\
   register struct addrinfo * __freeaddrinfo_ai __asm("a0") = (_freeaddrinfo_ai); \
   __asm volatile ("jsr a6@(-804:W)" \
-  : \
+  : "=r" (_d0), "=r" (_d1), "=r" (_a0), "=r" (_a1) \
   : "r"(__freeaddrinfo__bn), "r"(__freeaddrinfo_ai) \
-  : "d0", "d1", "a1", "fp0", "fp1", "cc", "memory"); \
+  : "fp0", "fp1", "cc", "memory"); \
   } \
 })
 
